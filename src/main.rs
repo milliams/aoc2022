@@ -31,7 +31,7 @@ where
 
     calories_per_elf.sort();
 
-    if calories_per_elf.len() >= number {
+    if calories_per_elf.len() < number {
         bail!("Not enough Elves");
     }
 
@@ -43,8 +43,19 @@ fn day1() -> Result<u32> {
 }
 
 fn main() -> Result<()> {
-    let max_calories = day1()?;
-    println!("{}", max_calories);
+    println!("Day 1: {}", day1()?);
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn test_day1() -> Result<()> {
+        assert_eq!(get_max(vec!["1000", "2000", "3000", "", "4000", "", "5000", "6000", "", "7000", "8000", "9000", "", "10000"], 1)?, 24000);
+        assert_eq!(get_max(vec!["1000", "2000", "3000", "", "4000", "", "5000", "6000", "", "7000", "8000", "9000", "", "10000"], 3)?, 45000);
+        assert_eq!(day1()?, 208567);
+        Ok(())
+    }
 }
