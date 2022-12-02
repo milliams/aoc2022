@@ -67,14 +67,14 @@ where
             'C' => RPS::Scissors,
             _ => bail!("Invalid move")
         };
-        let should_win = match line.chars().nth(2).context("No second char")? {
+        let desired_result = match line.chars().nth(2).context("No second char")? {
             'X' => GameResult::Lose,
             'Y' => GameResult::Draw,
             'Z' => GameResult::Win,
             _ => bail!("Invalid strategy")
         };
 
-        let play = match (&other_move, &should_win) {
+        let play = match (&other_move, &desired_result) {
             (RPS::Rock, GameResult::Lose) => RPS::Scissors,
             (RPS::Rock, GameResult::Draw) => RPS::Rock,
             (RPS::Rock, GameResult::Win) => RPS::Paper,
@@ -92,7 +92,7 @@ where
             RPS::Scissors => 3,
         };
 
-        let play_score = match should_win {
+        let play_score = match desired_result {
             GameResult::Lose => 0,
             GameResult::Draw => 3,
             GameResult::Win => 6,
@@ -104,11 +104,11 @@ where
 }
 
 fn day1() -> Result<u32> {
-    get_max(read_lines!("day1.txt"), 3)
+    get_max(read_lines!("day1.txt"), 3).context("Getting calorie inventory")
 }
 
 fn day2() -> Result<u32> {
-    calculate_rps_score(read_lines!("day2.txt"))
+    calculate_rps_score(read_lines!("day2.txt")).context("Calculating RPS scores")
 }
 
 fn main() -> Result<()> {
@@ -130,7 +130,7 @@ mod tests {
     }
     #[test]
     fn test_day2() -> Result<()> {
-        assert_eq!(calculate_rps_score(vec!["G Y", "B X", "C Z"])?, 12);
+        assert_eq!(calculate_rps_score(vec!["A Y", "B X", "C Z"])?, 12);
         assert_eq!(day2()?, 14859);
         Ok(())
     }
