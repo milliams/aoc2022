@@ -1,0 +1,1 @@
+kate-wildcard(*.txt): remove-trailing-spaces none;
