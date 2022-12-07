@@ -9,7 +9,7 @@ mod day6;
 
 macro_rules! read_lines {
     ($expression:expr) => {
-        BufReader::new(File::open($expression)?).lines().filter(|l| l.is_ok()).map(|l| l.unwrap())
+        BufReader::new(std::fs::File::open($expression)?).lines().filter(|l| l.is_ok()).map(|l| l.unwrap())
     };
 }
 
