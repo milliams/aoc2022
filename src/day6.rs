@@ -22,7 +22,7 @@ fn find_start_marker<S: ToString>(message: S, marker_type: MessageMarker) -> Res
         .windows(window_size)
         .enumerate()
     {
-        let unique = &window.iter().unique().collect::<Vec<&u8>>().len();
+        let unique = &window.iter().unique().count();
         if unique == &window.len() {
             answer = Some(i + window_size);
             break;

@@ -12,23 +12,21 @@ where
     let mut num_overlap = 0;
     for line in lines {
         let line = line.as_ref();
-        let mut splits = line.split(",").take(2);
-        let a = splits.nth(0).context("no Elf 1")?;
-        let b = splits.nth(0).context("no Elf 2")?;
-        let mut a = a.split("-").take(2);
-        let mut b = b.split("-").take(2);
-        let a_start: u32 = a.nth(0).context("no Elf 1 start")?.parse()?;
-        let a_end: u32 = a.nth(0).context("no Elf 1 end")?.parse()?;
-        let b_start: u32 = b.nth(0).context("no Elf 2 start")?.parse()?;
-        let b_end: u32 = b.nth(0).context("no Elf 2 end")?.parse()?;
+        let mut splits = line.split(',').take(2);
+        let a = splits.next().context("no Elf 1")?;
+        let b = splits.next().context("no Elf 2")?;
+        let mut a = a.split('-').take(2);
+        let mut b = b.split('-').take(2);
+        let a_start: u32 = a.next().context("no Elf 1 start")?.parse()?;
+        let a_end: u32 = a.next().context("no Elf 1 end")?.parse()?;
+        let b_start: u32 = b.next().context("no Elf 2 start")?.parse()?;
+        let b_end: u32 = b.next().context("no Elf 2 end")?.parse()?;
         if include_partial {
-            if (a_start <= b_start && a_end >= b_start) || (a_start <= b_end && a_end >= b_start) {
+            if (a_start <= b_end || a_start <= b_start) && a_end >= b_start {
                 num_overlap += 1;
             }
-        } else {
-            if (a_start <= b_start && a_end >= b_end) || (b_start <= a_start && b_end >= a_end) {
-                num_overlap += 1;
-            }
+        } else if (a_start <= b_start && a_end >= b_end) || (b_start <= a_start && b_end >= a_end) {
+            num_overlap += 1;
         }
     }
 
@@ -36,9 +34,8 @@ where
 }
 
 pub fn day4() -> Result<u32> {
-    let a = overlapping_assignments(read_lines!("day4.txt"), true)
-        .context("Calculating overlapping assignments");
-    a
+    overlapping_assignments(read_lines!("day4.txt"), true)
+        .context("Calculating overlapping assignments")
 }
 
 #[cfg(test)]

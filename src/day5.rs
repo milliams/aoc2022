@@ -59,8 +59,7 @@ where
 }
 
 pub fn day5() -> Result<String> {
-    let a = reorder_stacks(read_lines!("day5.txt")).context("Reording crate stacks");
-    a
+    reorder_stacks(read_lines!("day5.txt")).context("Reording crate stacks")
 }
 
 #[cfg(test)]

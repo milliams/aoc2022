@@ -79,18 +79,15 @@ where
     I::Item: AsRef<str>,
 {
     let (all_dirs, fs) = construct_fs(lines)?;
-    let dir_sizes: Vec<(_, _)> = all_dirs
-        .iter()
-        .map(|d| {
-            (
-                d,
-                fs.iter()
-                    .filter(|(p, _)| p.starts_with(d))
-                    .map(|(_, s)| s)
-                    .sum::<u32>(),
-            )
-        })
-        .collect();
+    let dir_sizes = all_dirs.iter().map(|d| {
+        (
+            d,
+            fs.iter()
+                .filter(|(p, _)| p.starts_with(d))
+                .map(|(_, s)| s)
+                .sum::<u32>(),
+        )
+    });
     let dir_sizes: HashMap<_, _> = dir_sizes.into_iter().collect();
     let total_space = 70000000;
     let required = 30000000;

@@ -20,7 +20,7 @@ where
         let overlap = left
             .intersection(&right)
             .take(1)
-            .nth(0)
+            .next()
             .context("No misplaced item")?;
         let priority = match overlap {
             'A'..='Z' => *overlap as u32 - 38, // A-Z = 27-52
@@ -49,12 +49,12 @@ where
             group_backpacks[0]
                 .intersection(&group_backpacks[1])
                 .into_iter()
-                .map(|c| *c),
+                .copied(),
         );
         let total_intersection = first_intersection
             .intersection(&group_backpacks[2])
             .take(1)
-            .nth(0)
+            .next()
             .context("No matching group badge")?;
         let priority = match total_intersection {
             'A'..='Z' => *total_intersection as u32 - 38, // A-Z = 27-52

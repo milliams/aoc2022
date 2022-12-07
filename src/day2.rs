@@ -27,7 +27,7 @@ where
         if line.len() != 3 {
             bail!("Line is wrong length");
         }
-        let other_move = match line.chars().nth(0).context("No zeroth char")? {
+        let other_move = match line.chars().next().context("No zeroth char")? {
             'A' => RPS::Rock,
             'B' => RPS::Paper,
             'C' => RPS::Scissors,
