@@ -31,15 +31,22 @@ fn find_start_marker<S: ToString>(message: S, marker_type: MessageMarker) -> Res
     answer.context("getting marker")
 }
 
-pub fn day6() -> Result<usize> {
+pub fn day6() -> Result<(usize, usize)> {
     let a = find_start_marker(
         read_lines!("day6.txt")
             .next()
             .context("getting line from file")?,
         MessageMarker::StartOfMessage,
     )
-    .context("finding start-of-packet marker");
-    a
+    .context("finding start-of-packet marker")?;
+    let b = find_start_marker(
+        read_lines!("day6.txt")
+            .next()
+            .context("getting line from file")?,
+        MessageMarker::StartOfPacket,
+    )
+    .context("finding start-of-packet marker")?;
+    Ok((a, b))
 }
 
 #[cfg(test)]
