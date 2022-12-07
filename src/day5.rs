@@ -62,7 +62,7 @@ pub fn day5() -> Result<String> {
 mod tests {
     use super::*;
     #[test]
-    fn test_day4() -> Result<()> {
+    fn test_day5() -> Result<()> {
         assert_eq!(reorder_stacks(vec!["    [D]    ", "[N] [C]    ", "[Z] [M] [P]", " 1   2   3 ", "", "move 1 from 2 to 1", "move 3 from 1 to 3", "move 2 from 2 to 1", "move 1 from 1 to 2"])?, "MCD");
         //assert_eq!(day5()?, 911);
         Ok(())
