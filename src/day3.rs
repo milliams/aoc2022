@@ -66,13 +66,11 @@ where
     Ok(group_priorities.iter().sum())
 }
 
-pub fn day3() -> Result<()> {
+pub fn day3() -> Result<(u32, u32)> {
     let a =
         calculate_backpack_score(read_lines!("day3.txt")).context("Calculating backpack score")?;
     let b = identify_group_badge(read_lines!("day3.txt")).context("Calculating group badges")?;
-    println!("Day 3: {}", a);
-    println!("Day 3: {}", b);
-    Ok(())
+    Ok((a, b))
 }
 
 #[cfg(test)]
