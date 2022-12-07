@@ -1,7 +1,7 @@
 use std::collections::HashSet;
-use std::io::{BufReader, BufRead};
+use std::io::{BufRead, BufReader};
 
-use anyhow::{Context, Result, bail};
+use anyhow::{bail, Context, Result};
 use itertools::Itertools;
 
 use crate::read_lines;
@@ -17,11 +17,15 @@ where
         let compartment_size = line.len() / 2;
         let left: HashSet<char> = HashSet::from_iter(line[..compartment_size].chars());
         let right: HashSet<char> = HashSet::from_iter(line[compartment_size..].chars());
-        let overlap = left.intersection(&right).take(1).nth(0).context("No misplaced item")?;
+        let overlap = left
+            .intersection(&right)
+            .take(1)
+            .nth(0)
+            .context("No misplaced item")?;
         let priority = match overlap {
-            'A'..='Z' => *overlap as u32 - 38,  // A-Z = 27-52
-            'a'..='z' => *overlap as u32 - 96,  // a-z = 1-26
-            _ => bail!("Invalid backpack item")
+            'A'..='Z' => *overlap as u32 - 38, // A-Z = 27-52
+            'a'..='z' => *overlap as u32 - 96, // a-z = 1-26
+            _ => bail!("Invalid backpack item"),
         };
         item_priorities.push(priority);
     }
@@ -41,12 +45,21 @@ where
             let backpack: HashSet<char> = HashSet::from_iter(line.chars());
             group_backpacks.push(backpack);
         }
-        let first_intersection = HashSet::from_iter(group_backpacks[0].intersection(&group_backpacks[1]).into_iter().map(|c| *c));
-        let total_intersection = first_intersection.intersection(&group_backpacks[2]).take(1).nth(0).context("No matching group badge")?;
+        let first_intersection = HashSet::from_iter(
+            group_backpacks[0]
+                .intersection(&group_backpacks[1])
+                .into_iter()
+                .map(|c| *c),
+        );
+        let total_intersection = first_intersection
+            .intersection(&group_backpacks[2])
+            .take(1)
+            .nth(0)
+            .context("No matching group badge")?;
         let priority = match total_intersection {
-            'A'..='Z' => *total_intersection as u32 - 38,  // A-Z = 27-52
-            'a'..='z' => *total_intersection as u32 - 96,  // a-z = 1-26
-            _ => bail!("Invalid backpack item")
+            'A'..='Z' => *total_intersection as u32 - 38, // A-Z = 27-52
+            'a'..='z' => *total_intersection as u32 - 96, // a-z = 1-26
+            _ => bail!("Invalid backpack item"),
         };
         group_priorities.push(priority);
     }
@@ -54,7 +67,8 @@ where
 }
 
 pub fn day3() -> Result<()> {
-    let a = calculate_backpack_score(read_lines!("day3.txt")).context("Calculating backpack score")?;
+    let a =
+        calculate_backpack_score(read_lines!("day3.txt")).context("Calculating backpack score")?;
     let b = identify_group_badge(read_lines!("day3.txt")).context("Calculating group badges")?;
     println!("Day 3: {}", a);
     println!("Day 3: {}", b);
@@ -66,9 +80,28 @@ mod tests {
     use super::*;
     #[test]
     fn test_day3() -> Result<()> {
-        assert_eq!(calculate_backpack_score(vec!["vJrwpWtwJgWrhcsFMMfFFhFp", "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL", "PmmdzqPrVvPwwTWBwg", "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn", "ttgJtRGJQctTZtZT", "CrZsJsPPZsGzwwsLwLmpwMDw"])?, 157);
-        assert_eq!(identify_group_badge(vec!["vJrwpWtwJgWrhcsFMMfFFhFp", "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL", "PmmdzqPrVvPwwTWBwg", "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn", "ttgJtRGJQctTZtZT", "CrZsJsPPZsGzwwsLwLmpwMDw"])?, 70);
+        assert_eq!(
+            calculate_backpack_score(vec![
+                "vJrwpWtwJgWrhcsFMMfFFhFp",
+                "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
+                "PmmdzqPrVvPwwTWBwg",
+                "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn",
+                "ttgJtRGJQctTZtZT",
+                "CrZsJsPPZsGzwwsLwLmpwMDw"
+            ])?,
+            157
+        );
+        assert_eq!(
+            identify_group_badge(vec![
+                "vJrwpWtwJgWrhcsFMMfFFhFp",
+                "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
+                "PmmdzqPrVvPwwTWBwg",
+                "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn",
+                "ttgJtRGJQctTZtZT",
+                "CrZsJsPPZsGzwwsLwLmpwMDw"
+            ])?,
+            70
+        );
         Ok(())
     }
 }
-

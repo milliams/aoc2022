@@ -1,4 +1,4 @@
-use std::io::{BufReader, BufRead};
+use std::io::{BufRead, BufReader};
 
 use anyhow::{Context, Result};
 
@@ -36,7 +36,8 @@ where
 }
 
 pub fn day4() -> Result<u32> {
-    let a = overlapping_assignments(read_lines!("day4.txt"), true).context("Calculating overlapping assignments");
+    let a = overlapping_assignments(read_lines!("day4.txt"), true)
+        .context("Calculating overlapping assignments");
     a
 }
 
@@ -45,10 +46,21 @@ mod tests {
     use super::*;
     #[test]
     fn test_day4() -> Result<()> {
-        assert_eq!(overlapping_assignments(vec!["2-4,6-8", "2-3,4-5", "5-7,7-9", "2-8,3-7", "6-6,4-6", "2-6,4-8"], false)?, 2);
-        assert_eq!(overlapping_assignments(vec!["2-4,6-8", "2-3,4-5", "5-7,7-9", "2-8,3-7", "6-6,4-6", "2-6,4-8"], true)?, 4);
+        assert_eq!(
+            overlapping_assignments(
+                vec!["2-4,6-8", "2-3,4-5", "5-7,7-9", "2-8,3-7", "6-6,4-6", "2-6,4-8"],
+                false
+            )?,
+            2
+        );
+        assert_eq!(
+            overlapping_assignments(
+                vec!["2-4,6-8", "2-3,4-5", "5-7,7-9", "2-8,3-7", "6-6,4-6", "2-6,4-8"],
+                true
+            )?,
+            4
+        );
         assert_eq!(day4()?, 911);
         Ok(())
     }
 }
-

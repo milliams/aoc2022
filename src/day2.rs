@@ -1,6 +1,6 @@
-use std::io::{BufReader, BufRead};
+use std::io::{BufRead, BufReader};
 
-use anyhow::{Context, Result, bail};
+use anyhow::{bail, Context, Result};
 
 use crate::read_lines;
 
@@ -31,13 +31,13 @@ where
             'A' => RPS::Rock,
             'B' => RPS::Paper,
             'C' => RPS::Scissors,
-            _ => bail!("Invalid move")
+            _ => bail!("Invalid move"),
         };
         let desired_result = match line.chars().nth(2).context("No second char")? {
             'X' => GameResult::Lose,
             'Y' => GameResult::Draw,
             'Z' => GameResult::Win,
-            _ => bail!("Invalid strategy")
+            _ => bail!("Invalid strategy"),
         };
 
         let play = match (&other_move, &desired_result) {

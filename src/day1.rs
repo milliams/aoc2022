@@ -1,6 +1,6 @@
-use std::io::{BufReader, BufRead};
+use std::io::{BufRead, BufReader};
 
-use anyhow::{Context, Result, bail};
+use anyhow::{bail, Context, Result};
 
 use crate::read_lines;
 
@@ -42,8 +42,26 @@ mod tests {
     use super::*;
     #[test]
     fn test_day1() -> Result<()> {
-        assert_eq!(get_max(vec!["1000", "2000", "3000", "", "4000", "", "5000", "6000", "", "7000", "8000", "9000", "", "10000"], 1)?, 24000);
-        assert_eq!(get_max(vec!["1000", "2000", "3000", "", "4000", "", "5000", "6000", "", "7000", "8000", "9000", "", "10000"], 3)?, 45000);
+        assert_eq!(
+            get_max(
+                vec![
+                    "1000", "2000", "3000", "", "4000", "", "5000", "6000", "", "7000", "8000",
+                    "9000", "", "10000"
+                ],
+                1
+            )?,
+            24000
+        );
+        assert_eq!(
+            get_max(
+                vec![
+                    "1000", "2000", "3000", "", "4000", "", "5000", "6000", "", "7000", "8000",
+                    "9000", "", "10000"
+                ],
+                3
+            )?,
+            45000
+        );
         assert_eq!(day1()?, 208567);
         Ok(())
     }

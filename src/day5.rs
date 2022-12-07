@@ -1,5 +1,5 @@
 use std::collections::VecDeque;
-use std::io::{BufReader, BufRead};
+use std::io::{BufRead, BufReader};
 
 use anyhow::{Context, Result};
 
@@ -29,7 +29,7 @@ where
                 if crate_code != ' ' {
                     stacks[stack_num - 1].push_front(crate_code);
                 }
-            };
+            }
         } else {
             let moves: Vec<_> = line.split(' ').collect();
             let number = moves[1].parse()?;
@@ -37,7 +37,9 @@ where
             let to: usize = moves[5].parse()?;
             let mut staging: VecDeque<char> = VecDeque::new();
             for _ in 0..number {
-                let moving_crate = stacks[from - 1].pop_back().context("Getting crate from stack")?;
+                let moving_crate = stacks[from - 1]
+                    .pop_back()
+                    .context("Getting crate from stack")?;
                 staging.push_back(moving_crate);
             }
             for _ in 0..number {
@@ -50,7 +52,10 @@ where
             defining_stacks = false;
         }
     }
-    stacks.iter().map(|s| s.back().context("Getting top crate")).collect()
+    stacks
+        .iter()
+        .map(|s| s.back().context("Getting top crate"))
+        .collect()
 }
 
 pub fn day5() -> Result<String> {
@@ -63,9 +68,21 @@ mod tests {
     use super::*;
     #[test]
     fn test_day5() -> Result<()> {
-        assert_eq!(reorder_stacks(vec!["    [D]    ", "[N] [C]    ", "[Z] [M] [P]", " 1   2   3 ", "", "move 1 from 2 to 1", "move 3 from 1 to 3", "move 2 from 2 to 1", "move 1 from 1 to 2"])?, "MCD");
+        assert_eq!(
+            reorder_stacks(vec![
+                "    [D]    ",
+                "[N] [C]    ",
+                "[Z] [M] [P]",
+                " 1   2   3 ",
+                "",
+                "move 1 from 2 to 1",
+                "move 3 from 1 to 3",
+                "move 2 from 2 to 1",
+                "move 1 from 1 to 2"
+            ])?,
+            "MCD"
+        );
         //assert_eq!(day5()?, 911);
         Ok(())
     }
 }
-
