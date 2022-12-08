@@ -95,7 +95,7 @@ mod tests {
             max_scenic_score(vec!["30373", "25512", "65332", "33549", "35390"])?,
             8
         );
-        //assert_eq!(day5()?, 911);
+        assert_eq!(day8()?, (1789, 314820));
         Ok(())
     }
 }

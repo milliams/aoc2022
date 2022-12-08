@@ -81,7 +81,7 @@ mod tests {
             ])?,
             "MCD"
         );
-        //assert_eq!(day5()?, 911);
+        assert_eq!(day5()?, "BRQWDBBJM");
         Ok(())
     }
 }
