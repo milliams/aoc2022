@@ -25,8 +25,7 @@ where
                     //reading_contents_of = None;
                     match *dir {
                         "/" => {
-                            current_path = PathBuf::new();
-                            current_path.push("/");
+                            current_path = PathBuf::from("/");
                         }
                         ".." => {
                             current_path.pop();
@@ -103,8 +102,8 @@ where
 }
 
 pub fn day7() -> Result<(u32, u32)> {
-    let a = sum_small_dirs(read_lines!("day7.txt")).context("Reording crate stacks")?;
-    let b = find_freeing_dir(read_lines!("day7.txt")).context("Reording crate stacks")?;
+    let a = sum_small_dirs(read_lines!("day7.txt")).context("Finding smallest dirs")?;
+    let b = find_freeing_dir(read_lines!("day7.txt")).context("Finding dir to free space")?;
     Ok((a, b))
 }
 
