@@ -77,8 +77,8 @@ where
 }
 
 pub fn day8() -> Result<(u32, u32)> {
-    let a = count_visible_trees(read_lines!("day8.txt")).context("")?;
-    let b = max_scenic_score(read_lines!("day8.txt")).context("")?;
+    let a = count_visible_trees(read_lines!("day08.txt")).context("")?;
+    let b = max_scenic_score(read_lines!("day08.txt")).context("")?;
     Ok((a, b))
 }
 

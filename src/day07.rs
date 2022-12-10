@@ -102,8 +102,8 @@ where
 }
 
 pub fn day7() -> Result<(u32, u32)> {
-    let a = sum_small_dirs(read_lines!("day7.txt")).context("Finding smallest dirs")?;
-    let b = find_freeing_dir(read_lines!("day7.txt")).context("Finding dir to free space")?;
+    let a = sum_small_dirs(read_lines!("day07.txt")).context("Finding smallest dirs")?;
+    let b = find_freeing_dir(read_lines!("day07.txt")).context("Finding dir to free space")?;
     Ok((a, b))
 }
 

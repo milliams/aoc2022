@@ -33,14 +33,14 @@ fn find_start_marker<S: ToString>(message: S, marker_type: MessageMarker) -> Res
 
 pub fn day6() -> Result<(usize, usize)> {
     let a = find_start_marker(
-        read_lines!("day6.txt")
+        read_lines!("day06.txt")
             .next()
             .context("getting line from file")?,
         MessageMarker::StartOfMessage,
     )
     .context("finding start-of-packet marker")?;
     let b = find_start_marker(
-        read_lines!("day6.txt")
+        read_lines!("day06.txt")
             .next()
             .context("getting line from file")?,
         MessageMarker::StartOfPacket,
@@ -85,7 +85,7 @@ mod tests {
         );
         assert_eq!(
             find_start_marker(
-                read_lines!("day6.txt")
+                read_lines!("day06.txt")
                     .next()
                     .context("getting line from file")?,
                 MessageMarker::StartOfPacket
@@ -130,7 +130,7 @@ mod tests {
         );
         assert_eq!(
             find_start_marker(
-                read_lines!("day6.txt")
+                read_lines!("day06.txt")
                     .next()
                     .context("getting line from file")?,
                 MessageMarker::StartOfMessage

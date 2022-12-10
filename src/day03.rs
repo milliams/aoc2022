@@ -68,8 +68,8 @@ where
 
 pub fn day3() -> Result<(u32, u32)> {
     let a =
-        calculate_backpack_score(read_lines!("day3.txt")).context("Calculating backpack score")?;
-    let b = identify_group_badge(read_lines!("day3.txt")).context("Calculating group badges")?;
+        calculate_backpack_score(read_lines!("day03.txt")).context("Calculating backpack score")?;
+    let b = identify_group_badge(read_lines!("day03.txt")).context("Calculating group badges")?;
     Ok((a, b))
 }
 

@@ -70,7 +70,7 @@ where
 }
 
 pub fn day2() -> Result<u32> {
-    calculate_rps_score(read_lines!("day2.txt")).context("Calculating RPS scores")
+    calculate_rps_score(read_lines!("day02.txt")).context("Calculating RPS scores")
 }
 
 #[cfg(test)]

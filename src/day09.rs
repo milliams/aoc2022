@@ -81,8 +81,8 @@ where
 }
 
 pub fn day9() -> Result<(usize, usize)> {
-    let a = tail_coverage(read_lines!("day9.txt"), 2).context("getting tail coverage")?;
-    let b = tail_coverage(read_lines!("day9.txt"), 10).context("getting tail coverage")?;
+    let a = tail_coverage(read_lines!("day09.txt"), 2).context("getting tail coverage")?;
+    let b = tail_coverage(read_lines!("day09.txt"), 10).context("getting tail coverage")?;
     Ok((a, b))
 }
 

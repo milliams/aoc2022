@@ -34,7 +34,7 @@ where
 }
 
 pub fn day4() -> Result<u32> {
-    overlapping_assignments(read_lines!("day4.txt"), true)
+    overlapping_assignments(read_lines!("day04.txt"), true)
         .context("Calculating overlapping assignments")
 }
 

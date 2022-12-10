@@ -34,7 +34,7 @@ where
 }
 
 pub fn day1() -> Result<u32> {
-    get_max(read_lines!("day1.txt"), 3).context("Getting calorie inventory")
+    get_max(read_lines!("day01.txt"), 3).context("Getting calorie inventory")
 }
 
 #[cfg(test)]
