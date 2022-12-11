@@ -11,8 +11,7 @@ enum Instruction {
 }
 
 fn parse_instruction(text: &str) -> Result<Instruction> {
-    let movement_parts: Vec<_> = text.split(' ').collect();
-    let m = match movement_parts.as_slice() {
+    let m = match text.split(' ').collect::<Vec<_>>().as_slice() {
         ["noop"] => Instruction::Noop,
         ["addx", v] => Instruction::AddX(v.parse()?),
         _ => bail!("invalid instruction '{}'", &text),
