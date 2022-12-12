@@ -1,24 +1,15 @@
 use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Context, Result};
-use itertools::Itertools;
 use ndarray::{stack, Array1, Array2, Axis};
 use pathfinding::directed::bfs::bfs;
 
 use crate::read_lines;
 
-#[derive(Debug)]
-enum Connection {
-    Up,
-    Down,
-    Left,
-    Right,
-}
-
 type Heightmap = Array2<u8>;
-type Graph = Array2<[Option<Connection>; 4]>;
+type Pos = (usize, usize);
 
-fn lines_to_grid<I>(lines: I) -> Result<(Heightmap, Graph, (usize, usize), (usize, usize))>
+fn lines_to_grid<I>(lines: I) -> Result<(Heightmap, Pos, Pos)>
 where
     I: IntoIterator,
     I::Item: AsRef<str>,
@@ -54,77 +45,44 @@ where
     let heightmap: Vec<_> = heightmap.iter().map(|x| x.view()).collect();
     let heightmap = stack(Axis(0), &heightmap)?;
 
-    let graph_vec: Vec<[Option<Connection>; 4]> = heightmap
-        .indexed_iter()
-        .map(|((row, col), h)| {
-            let up = if row > 0 && heightmap[(row - 1, col)] <= h + 1 {
-                Some(Connection::Up)
-            } else {
-                None
-            };
-            let left = if col > 0 && heightmap[(row, col - 1)] <= h + 1 {
-                Some(Connection::Left)
-            } else {
-                None
-            };
-            let down = if row < heightmap.shape()[0] - 1 && heightmap[(row + 1, col)] <= h + 1 {
-                Some(Connection::Down)
-            } else {
-                None
-            };
-            let right = if col < heightmap.shape()[1] - 1 && heightmap[(row, col + 1)] <= h + 1 {
-                Some(Connection::Right)
-            } else {
-                None
-            };
-            [up, down, left, right]
-        })
-        .collect();
-    let graph = Array2::from_shape_vec([heightmap.shape()[0], heightmap.shape()[1]], graph_vec)
-        .context("")?;
     Ok((
         heightmap,
-        graph,
         start.context("getting start")?,
         end.context("getting end")?,
     ))
 }
 
-fn find_path(
-    graph: &Graph,
-    start: (usize, usize),
-    end: (usize, usize),
-) -> Option<Vec<(usize, usize)>> {
+fn find_path(graph: &Heightmap, start: Pos, end: Pos) -> Option<Vec<Pos>> {
     bfs(
         &start,
         |p| {
-            graph[*p]
-                .iter()
-                .filter_map(|c| match c {
-                    Some(Connection::Up) => Some((p.0 - 1, p.1)),
-                    Some(Connection::Down) => Some((p.0 + 1, p.1)),
-                    Some(Connection::Left) => Some((p.0, p.1 - 1)),
-                    Some(Connection::Right) => Some((p.0, p.1 + 1)),
-                    None => None,
-                })
-                .collect_vec()
+            let (row, col) = *p;
+            let h = graph[*p];
+            let mut successors = vec![];
+            if row > 0 && graph[(row - 1, col)] <= h + 1 {
+                successors.push((row - 1, col))
+            }
+            if col > 0 && graph[(row, col - 1)] <= h + 1 {
+                successors.push((row, col - 1))
+            }
+            if row < graph.shape()[0] - 1 && graph[(row + 1, col)] <= h + 1 {
+                successors.push((row + 1, col))
+            }
+            if col < graph.shape()[1] - 1 && graph[(row, col + 1)] <= h + 1 {
+                successors.push((row, col + 1))
+            }
+            successors
         },
         |p| *p == end,
     )
 }
 
-fn find_shortest_from_height(
-    graph: &Graph,
-    heightmap: &Heightmap,
-    height: u32,
-    end: (usize, usize),
-) -> Result<usize> {
-    graph
+fn find_shortest_from_height(heightmap: &Heightmap, height: u32, end: Pos) -> Result<usize> {
+    heightmap
         .indexed_iter()
-        .filter_map(|(c, _)| {
-            let h = heightmap[c] as u32;
-            if h == height {
-                find_path(graph, c, end)
+        .filter_map(|(c, h)| {
+            if *h as u32 == height {
+                find_path(heightmap, c, end)
             } else {
                 None
             }
@@ -134,15 +92,15 @@ fn find_shortest_from_height(
         .context("finding shortest start")
 }
 
-fn solve_maze<I>(lines: I) -> Result<(usize, usize)>
+fn solve_maze<I>(lines: I) -> Result<Pos>
 where
     I: IntoIterator,
     I::Item: AsRef<str>,
 {
-    let (heightmap, graph, start, end) = lines_to_grid(lines)?;
-    let start_to_end = find_path(&graph, start, end);
+    let (heightmap, start, end) = lines_to_grid(lines)?;
+    let start_to_end = find_path(&heightmap, start, end);
 
-    let shortest_from_start_level = find_shortest_from_height(&graph, &heightmap, 0, end)?;
+    let shortest_from_start_level = find_shortest_from_height(&heightmap, 0, end)?;
 
     Ok((
         start_to_end.context("")?.len() - 1,
@@ -150,7 +108,7 @@ where
     ))
 }
 
-pub fn day12() -> Result<(usize, usize)> {
+pub fn day12() -> Result<Pos> {
     solve_maze(read_lines!("day12.txt")).context("solving maze")
 }
 
@@ -164,12 +122,13 @@ abcryxxl
 accszExk
 acctuvwj
 abdefghi";
-        let (heightmap, graph, start, end) = lines_to_grid(test_data.lines())?;
+        let (heightmap, start, end) = lines_to_grid(test_data.lines())?;
         assert_eq!(start, (0, 0));
         assert_eq!(end, (2, 5));
-        assert_eq!(find_path(&graph, start, end).context("")?.len() - 1, 31);
+        assert_eq!(find_path(&heightmap, start, end).context("")?.len() - 1, 31);
+        assert_eq!(find_shortest_from_height(&heightmap, 0, end)?, 29);
 
-        assert_eq!(find_shortest_from_height(&graph, &heightmap, 0, end)?, 29);
+        assert_eq!(day12()?, (412, 402));
 
         Ok(())
     }
