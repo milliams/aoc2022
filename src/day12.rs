@@ -117,12 +117,8 @@ mod tests {
     use super::*;
     #[test]
     fn test_day() -> Result<()> {
-        let test_data = "Sabqponm
-abcryxxl
-accszExk
-acctuvwj
-abdefghi";
-        let (heightmap, start, end) = lines_to_grid(test_data.lines())?;
+        let test_data = ["Sabqponm", "abcryxxl", "accszExk", "acctuvwj", "abdefghi"];
+        let (heightmap, start, end) = lines_to_grid(test_data)?;
         assert_eq!(start, (0, 0));
         assert_eq!(end, (2, 5));
         assert_eq!(find_path(&heightmap, start, end).context("running test")?.len() - 1, 31);
