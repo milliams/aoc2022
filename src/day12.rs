@@ -1,6 +1,6 @@
 use std::io::{BufRead, BufReader};
 
-use anyhow::{bail, Context, Result};
+use anyhow::{anyhow, Context, Result};
 use ndarray::{stack, Array1, Array2, Axis};
 use pathfinding::directed::bfs::bfs;
 
@@ -35,7 +35,7 @@ where
                             end = Some((row, col));
                             Ok(b'z' - b'a')
                         }
-                        _ => bail!(""),
+                        _ => Err(anyhow!("symbol not found")),
                     }
                 })
                 .collect()
@@ -103,7 +103,7 @@ where
     let shortest_from_start_level = find_shortest_from_height(&heightmap, 0, end)?;
 
     Ok((
-        start_to_end.context("")?.len() - 1,
+        start_to_end.context("finding primary path")?.len() - 1,
         shortest_from_start_level,
     ))
 }
@@ -125,7 +125,7 @@ abdefghi";
         let (heightmap, start, end) = lines_to_grid(test_data.lines())?;
         assert_eq!(start, (0, 0));
         assert_eq!(end, (2, 5));
-        assert_eq!(find_path(&heightmap, start, end).context("")?.len() - 1, 31);
+        assert_eq!(find_path(&heightmap, start, end).context("running test")?.len() - 1, 31);
         assert_eq!(find_shortest_from_height(&heightmap, 0, end)?, 29);
 
         assert_eq!(day12()?, (412, 402));
