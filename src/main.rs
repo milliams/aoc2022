@@ -11,6 +11,7 @@ mod day08;
 mod day09;
 mod day10;
 mod day11;
+mod day12;
 
 macro_rules! read_lines {
     ($expression:expr) => {
@@ -37,6 +38,7 @@ fn main() -> Result<()> {
     println!("Day 10: {}", d10a);
     println!("{}", d10b);
     println!("Day 11: {:?}", day11::day11()?);
+    println!("Day 12: {:?}", day12::day12()?);
 
     Ok(())
 }
