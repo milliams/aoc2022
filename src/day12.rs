@@ -121,7 +121,13 @@ mod tests {
         let (heightmap, start, end) = lines_to_grid(test_data)?;
         assert_eq!(start, (0, 0));
         assert_eq!(end, (2, 5));
-        assert_eq!(find_path(&heightmap, start, end).context("running test")?.len() - 1, 31);
+        assert_eq!(
+            find_path(&heightmap, start, end)
+                .context("running test")?
+                .len()
+                - 1,
+            31
+        );
         assert_eq!(find_shortest_from_height(&heightmap, 0, end)?, 29);
 
         assert_eq!(day12()?, (412, 402));
